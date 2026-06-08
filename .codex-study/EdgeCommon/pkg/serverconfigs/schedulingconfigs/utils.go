@@ -10,6 +10,12 @@ func AllSchedulingTypes() []maps.Map {
 		new(RoundRobinScheduling),
 		new(HashScheduling),
 		new(StickyScheduling),
+		new(DynamicLatencyScheduling),
+		new(LeastOutstandingScheduling),
+		new(GeoFailoverScheduling),
+		new(GeoProximityScheduling),
+		new(LatencyPolicyScheduling),
+		new(TrafficDialWeightedScheduling),
 	} {
 		summary := s.Summary()
 		summary["instance"] = s

@@ -44,6 +44,9 @@ func (this *SchedulingGroup) NextOrigin(call *shared.RequestCall) *OriginConfig 
 
 	if this.Scheduling != nil && call != nil && call.Options != nil {
 		for k, v := range this.Scheduling.Options {
+			if k == schedulingconfigs.OptionRuntimeStats {
+				continue
+			}
 			call.Options[k] = v
 		}
 	}
