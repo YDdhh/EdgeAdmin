@@ -70,6 +70,7 @@ func (this *HTTPRequest) doOriginRequest(failedOriginIds []int64, failedLnNodeId
 	requestCall.Request = this.RawReq
 	requestCall.Formatter = this.Format
 	requestCall.Domain = this.ReqHost
+	this.prepareSchedulingRequestCall(requestCall)
 
 	var origin *serverconfigs.OriginConfig
 
@@ -315,7 +316,9 @@ func (this *HTTPRequest) doOriginRequest(failedOriginIds []int64, failedLnNodeId
 		}
 
 		// 开始请求
+		finishSchedulingStats := SharedOriginSchedulingStats.Begin(origin)
 		resp, requestErr = client.Do(this.RawReq)
+		finishSchedulingStats(requestErr == nil && resp != nil)
 
 		// recover Accept-Encoding
 		if acceptEncodingChanged {
@@ -335,8 +338,10 @@ func (this *HTTPRequest) doOriginRequest(failedOriginIds []int64, failedLnNodeId
 			}
 		}
 	} else if origin.OSS != nil { // OSS源站
+		finishSchedulingStats := SharedOriginSchedulingStats.Begin(origin)
 		var goNext bool
 		resp, goNext, requestErrCode, _, requestErr = this.doOSSOrigin(origin)
+		finishSchedulingStats(requestErr == nil && resp != nil)
 		if requestErr == nil {
 			if resp == nil || !goNext {
 				return

@@ -5,6 +5,7 @@ go 1.22
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
+	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
 	github.com/andybalholm/brotli v1.0.5
 	github.com/aws/aws-sdk-go v1.44.279
